@@ -1,0 +1,45 @@
+---
+version: "3"
+
+networks:
+  app: {}
+  observability: {}
+
+volumes:
+  grafana-data: {}
+  prometheus-data: {}
+  pyroscope-data: {}
+
+services:
+  grafana:
+    image: grafana/grafana:10.3.3
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+    networks:
+      - observability
+    ports:
+      - 3000:3000
+    volumes:
+      - ./docker/grafana/provisioning/datasources.yml:/etc/grafana/provisioning/datasources/all.yml:ro
+      - ./docker/grafana/provisioning/dashboards.yml:/etc/grafana/provisioning/dashboards/all.yml:ro
+      - ./docker/grafana/dashboards:/opt/dashboards
+      - grafana-data:/var/lib/grafana
+
+  prometheus:
+    image: prom/prometheus:v2.50.0
+    networks:
+      - observability
+    ports:
+      - 9090:9090
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+
+  pyroscope:
+    image: grafana/pyroscope:1.4.0
+    networks:
+      - observability
+    ports:
+      - 4040:4040
