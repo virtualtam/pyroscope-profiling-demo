@@ -1,0 +1,23 @@
+[project]
+name = "waiter"
+dynamic = ["version"]
+
+[tool.poetry]
+name = "waiter"
+version = "0.1.0"
+description = "Pyroscope Demo Waiter"
+authors = [
+    "Frederic MARTIN <frederic@fgtech.fr>",
+    "Aurélien TAMISIER <aurelien.tamisier+talks@flibidi.net>",
+]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pyroscope-io = "0.8.5"
+fastapi = "0.110.0"
+uvicorn = { version = "0.27.1", extras = ["standard"] }
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
