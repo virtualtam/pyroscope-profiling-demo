@@ -11,6 +11,16 @@ volumes:
   pyroscope-data: {}
 
 services:
+  # Application services
+  cook:
+    build: ./services/cook
+    networks:
+      - app
+      - observability
+    ports:
+      - 8080:8080 # application
+
+  # Observability services
   grafana:
     image: grafana/grafana:10.3.3
     environment:
