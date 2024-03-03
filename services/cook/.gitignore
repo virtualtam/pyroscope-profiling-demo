@@ -1,0 +1,9 @@
+bench/
+build/
+
+cook.test
+
+coverage.out
+coverage.html
+
+.vscode/
