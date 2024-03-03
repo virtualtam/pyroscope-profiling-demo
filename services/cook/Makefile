@@ -28,3 +28,9 @@ race:
 test:
 	go test ./...
 .PHONY: test
+
+# Live development server
+live:
+	@echo "== Watching for changes... (hit Ctrl+C when done)"
+	@watchexec --restart --exts go -- go run ./cmd/cook/ --pyroscope-addr http://localhost:4040 run
+.PHONY: live

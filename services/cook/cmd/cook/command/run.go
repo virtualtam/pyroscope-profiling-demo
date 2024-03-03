@@ -6,6 +6,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
+	"github.com/virtualtam/pyroscope-profiling-demo/services/cook/cmd/cook/http/api"
 )
 
 const (
@@ -27,9 +28,11 @@ func NewRunCommand() *cobra.Command {
 				Msg("global: setting up services")
 
 			// Cook server
+			apiServer := api.NewServer()
+
 			httpServer := &http.Server{
 				Addr:         listenAddr,
-				Handler:      nil,
+				Handler:      apiServer,
 				ReadTimeout:  15 * time.Second,
 				WriteTimeout: 15 * time.Second,
 			}
