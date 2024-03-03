@@ -28,7 +28,8 @@ COPY --from=builder /app/build/cook /usr/local/bin/cook
 
 ENV COOK_LISTEN_ADDR="0.0.0.0:8080" \
     COOK_LOG_FORMAT="json" \
-    COOK_LOG_LEVEL="info"
+    COOK_LOG_LEVEL="info" \
+    COOK_PYROSCOPE_ADDR="http://pyroscope:4040"
 
 EXPOSE 8080
 

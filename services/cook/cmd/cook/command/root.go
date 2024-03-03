@@ -16,10 +16,16 @@ import (
 	"github.com/virtualtam/pyroscope-profiling-demo/services/cook/cmd/cook/config"
 )
 
+const (
+	pyroscopeApplicationName = "demo.cook"
+)
+
 var (
 	defaultLogLevelValue string = zerolog.LevelInfoValue
 	logLevelValue        string
 	logFormat            string
+
+	pyroscopeAddr string
 )
 
 // NewRootCommand initializes the main CLI entrypoint and common command flags.
@@ -57,10 +63,18 @@ func NewRootCommand() *cobra.Command {
 				log.Info().Strs("config_paths", configPaths).Msg("configuration: no file found")
 			}
 
-			pyroscope.Start(pyroscope.Config{
-				ApplicationName: "demo.cook",
-				ServerAddress:   "http://localhost:4040",
-			})
+			// Pyroscope live profiling
+			if pyroscopeAddr != "" {
+				log.Info().
+					Str("pyroscope_addr", pyroscopeAddr).
+					Str("pyroscope_app", pyroscopeApplicationName).
+					Msg("global: enabling live profiling")
+				pyroscope.Start(pyroscope.Config{
+					ApplicationName: pyroscopeApplicationName,
+					Logger:          &config.PyroscopeLogger{},
+					ServerAddress:   pyroscopeAddr,
+				})
+			}
 
 			return nil
 		},
@@ -80,6 +94,13 @@ func NewRootCommand() *cobra.Command {
 			"Log level (%s)",
 			strings.Join(config.LogLevelValues, ", "),
 		),
+	)
+
+	cmd.PersistentFlags().StringVar(
+		&pyroscopeAddr,
+		"pyroscope-addr",
+		"",
+		"Pyroscope server address (http://host:port)",
 	)
 
 	return cmd
