@@ -1,16 +1,19 @@
 package main
 
 import (
-	"net/http"
+	"github.com/spf13/cobra"
 
-	"github.com/grafana/pyroscope-go"
+	"github.com/virtualtam/pyroscope-profiling-demo/services/cook/cmd/cook/command"
 )
 
 func main() {
-	pyroscope.Start(pyroscope.Config{
-		ApplicationName: "demo.cook",
-		ServerAddress:   "http://localhost:4040",
-	})
+	rootCommand := command.NewRootCommand()
 
-	http.ListenAndServe(":8080", nil)
+	commands := []*cobra.Command{
+		command.NewRunCommand(),
+	}
+
+	rootCommand.AddCommand(commands...)
+
+	cobra.CheckErr(rootCommand.Execute())
 }

@@ -26,6 +26,10 @@ RUN groupadd \
 
 COPY --from=builder /app/build/cook /usr/local/bin/cook
 
+ENV COOK_LISTEN_ADDR="0.0.0.0:8080" \
+    COOK_LOG_FORMAT="json" \
+    COOK_LOG_LEVEL="info"
+
 EXPOSE 8080
 
 USER cook
