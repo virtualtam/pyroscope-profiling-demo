@@ -7,6 +7,7 @@ import (
 	chimiddleware "github.com/go-chi/chi/v5/middleware"
 	"github.com/rs/zerolog/hlog"
 	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
 
 	"github.com/virtualtam/pyroscope-profiling-demo/services/cook/cmd/cook/http/middleware"
 )
@@ -15,12 +16,14 @@ var _ http.Handler = &Server{}
 
 // Server exposes the HTTP API.
 type Server struct {
+	db     *gorm.DB
 	router *chi.Mux
 }
 
 // NewServer initializes and returns a new Server.
-func NewServer() *Server {
+func NewServer(db *gorm.DB) *Server {
 	s := &Server{
+		db:     db,
 		router: chi.NewRouter(),
 	}
 
@@ -45,4 +48,5 @@ func (s *Server) registerHandlers() {
 
 	// API
 	s.router.Get("/", http.NotFound)
+	s.registerV1API()
 }

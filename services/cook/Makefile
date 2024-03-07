@@ -31,6 +31,13 @@ test:
 
 # Live development server
 live:
+	@echo "== Starting services"
+	docker compose up -d postgres pyroscope
 	@echo "== Watching for changes... (hit Ctrl+C when done)"
 	@watchexec --restart --exts go -- go run ./cmd/cook/ --pyroscope-addr http://localhost:4040 run
 .PHONY: live
+
+# Live development server - PostgreSQL console
+psql:
+	docker compose exec postgres psql -U cook restaurant
+.PHONY: psql

@@ -7,6 +7,7 @@ networks:
 
 volumes:
   grafana-data: {}
+  postgres-data: {}
   prometheus-data: {}
   pyroscope-data: {}
 
@@ -19,6 +20,26 @@ services:
       - observability
     ports:
       - 8080:8080 # application
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: restaurant
+      POSTGRES_USER: cook
+      POSTGRES_PASSWORD: c00k
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U cook -d restaurant"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
 
   # Observability services
   grafana:
