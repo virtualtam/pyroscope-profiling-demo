@@ -1,6 +1,13 @@
 from fastapi import FastAPI
+from .config import (
+    LISTEN_PORT,
+    LISTEN_ADDR,
+    PYROSCOPE_ADDR,
+)
 import pyroscope
 import uvicorn
+
+APP_NAME = "demo.waiter"
 
 api = FastAPI(
     title="Waiter",
@@ -13,8 +20,8 @@ api = FastAPI(
 
 if __name__ == "__main__":
     pyroscope.configure(
-        app_name="demo.waiter",
-        server_address="http://127.0.0.1:4040",  # replace this with the address of your pyroscope server
+        app_name=APP_NAME,
+        server_address=PYROSCOPE_ADDR,
     )
 
-    uvicorn.run(api, host="0.0.0.0", port=8081)
+    uvicorn.run(api, host=LISTEN_ADDR, port=LISTEN_PORT)
