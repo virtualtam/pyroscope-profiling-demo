@@ -12,6 +12,7 @@ import pyroscope
 import uvicorn
 import structlog
 from uvicorn.protocols.utils import get_path_with_query_string
+from waiter.api.router import api_router
 
 APP_NAME = "demo.waiter"
 
@@ -21,17 +22,16 @@ configure_logging()
 
 access_logger = structlog.stdlib.get_logger("api.access")
 
+app = FastAPI()
+
 api = FastAPI(
     title="Waiter",
     description="Welcome to Waiter's API documentation!",
     root_path="/api/v1",
-    docs_url=None,
-    openapi_url="/docs/openapi.json",
-    redoc_url="/docs",
 )
 
 
-@api.middleware("http")
+@app.middleware("http")
 async def log_requests(request: Request, call_next):
     structlog.contextvars.clear_contextvars()
     # These context vars will be added to all log entries emitted during the request
@@ -73,7 +73,18 @@ async def log_requests(request: Request, call_next):
         return response
 
 
-api.add_middleware(CorrelationIdMiddleware)
+app.add_middleware(CorrelationIdMiddleware)
+
+
+@app.get("/")
+async def index():
+    return {"status": "ok"}
+
+
+# we add all API routes to the Web API framework
+api.include_router(api_router)
+
+app.mount("/api/v1", app=api)
 
 if __name__ == "__main__":
     if PYROSCOPE_ADDR != "":
@@ -82,4 +93,4 @@ if __name__ == "__main__":
             server_address=PYROSCOPE_ADDR,
         )
 
-    uvicorn.run(api, host=LISTEN_ADDR, port=LISTEN_PORT, log_config=None)
+    uvicorn.run(app, host=LISTEN_ADDR, port=LISTEN_PORT, log_config=None)
