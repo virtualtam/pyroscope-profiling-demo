@@ -12,6 +12,7 @@ func main() {
 	commands := []*cobra.Command{
 		command.NewImportCommand(),
 		command.NewMigrateCommand(),
+		command.NewCreateRestaurants(),
 		command.NewRunCommand(),
 	}
 

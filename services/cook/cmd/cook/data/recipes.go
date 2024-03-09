@@ -1,4 +1,4 @@
-package importing
+package data
 
 import (
 	"encoding/json"
@@ -39,14 +39,14 @@ func ImportRecipes(db *gorm.DB, jsonInput string) error {
 
 			err := db.Where("name = ?", ingredientName).First(&ingredient).Error
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				// create
 				ingredient = restaurant.Ingredient{
 					Name: ingredientName,
 				}
 
 				tx := db.Create(&ingredient)
 				if tx.Error != nil {
-					log.Error().Err(err).Msg("failed to create ingredient")
+					log.Error().Err(tx.Error).Msg("failed to create ingredient")
+					return tx.Error
 				}
 
 			} else if err != nil {
@@ -67,8 +67,8 @@ func ImportRecipes(db *gorm.DB, jsonInput string) error {
 
 		tx := db.Create(&dish)
 		if tx.Error != nil {
-			log.Error().Err(err).Msg("failed to create dish")
-			return err
+			log.Error().Err(tx.Error).Msg("failed to create dish")
+			return tx.Error
 		}
 
 		importedRecipes++

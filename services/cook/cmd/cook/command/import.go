@@ -2,7 +2,8 @@ package command
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/virtualtam/pyroscope-profiling-demo/services/cook/cmd/cook/importing"
+
+	"github.com/virtualtam/pyroscope-profiling-demo/services/cook/cmd/cook/data"
 )
 
 var (
@@ -14,7 +15,7 @@ func NewImportCommand() *cobra.Command {
 		Use:   "import-recipes",
 		Short: "Import recipes into the database",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return importing.ImportRecipes(db, inputFile)
+			return data.ImportRecipes(db, inputFile)
 		},
 	}
 
