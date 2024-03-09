@@ -79,11 +79,15 @@ func NewRootCommand() *cobra.Command {
 					Str("pyroscope_addr", pyroscopeAddr).
 					Str("pyroscope_app", pyroscopeApplicationName).
 					Msg("global: enabling live profiling")
-				pyroscope.Start(pyroscope.Config{
+
+				if _, err := pyroscope.Start(pyroscope.Config{
 					ApplicationName: pyroscopeApplicationName,
 					Logger:          &config.PyroscopeLogger{},
 					ServerAddress:   pyroscopeAddr,
-				})
+				}); err != nil {
+					log.Error().Err(err).Msg("global: failed to start profiler")
+					return err
+				}
 			}
 
 			// Database connection
