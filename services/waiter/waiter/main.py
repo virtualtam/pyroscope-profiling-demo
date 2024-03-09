@@ -4,7 +4,7 @@ import uvicorn
 from asgi_correlation_id import CorrelationIdMiddleware
 from fastapi import FastAPI
 from starlette.middleware.base import BaseHTTPMiddleware
-from waiter.api.router import api_router
+from waiter.api_route import api_router
 from waiter.config import (
     LISTEN_PORT,
     LISTEN_ADDR,
@@ -37,13 +37,13 @@ async def index():
 api = FastAPI(
     title="Waiter",
     description="Welcome to Waiter's API documentation!",
-    root_path="/api/v1",
+    root_path="/api",
 )
 
 # we add all API routes to the Web API framework
 api.include_router(api_router)
 
-app.mount("/api/v1", app=api)
+app.mount("/api", app=api)
 
 if __name__ == "__main__":
     if PYROSCOPE_ADDR != "":
