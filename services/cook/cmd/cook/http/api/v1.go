@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) registerV1API() {
-	s.router.Route("/v1", func(r chi.Router) {
+	s.router.Route("/api/v1", func(r chi.Router) {
 		r.Route("/restaurant/{restaurantID}", func(r chi.Router) {
 			r.Get("/menu", s.getMenu)
 		})
