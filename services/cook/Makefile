@@ -41,3 +41,7 @@ live:
 psql:
 	docker compose exec postgres psql -U cook restaurant
 .PHONY: psql
+
+pgdump:
+	docker compose exec postgres pg_dump -U cook --format custom restaurant > restaurant.dump
+.PHONY: pgdump
