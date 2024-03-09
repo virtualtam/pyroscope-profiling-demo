@@ -10,6 +10,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/virtualtam/pyroscope-profiling-demo/services/cook/cmd/cook/http/middleware"
+	"github.com/virtualtam/pyroscope-profiling-demo/services/cook/pkg/restaurant"
 )
 
 var _ http.Handler = &Server{}
@@ -18,13 +19,18 @@ var _ http.Handler = &Server{}
 type Server struct {
 	db     *gorm.DB
 	router *chi.Mux
+
+	restaurantService *restaurant.Service
 }
 
 // NewServer initializes and returns a new Server.
 func NewServer(db *gorm.DB) *Server {
+	restaurantService := restaurant.NewService(db)
+
 	s := &Server{
-		db:     db,
-		router: chi.NewRouter(),
+		db:                db,
+		router:            chi.NewRouter(),
+		restaurantService: restaurantService,
 	}
 
 	s.registerHandlers()

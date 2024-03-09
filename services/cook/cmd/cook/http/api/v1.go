@@ -7,26 +7,20 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 	"gorm.io/gorm"
-
-	"github.com/virtualtam/pyroscope-profiling-demo/services/cook/pkg/restaurant"
 )
 
 func (s *Server) registerV1API() {
 	s.router.Route("/api/v1", func(r chi.Router) {
 		r.Route("/restaurant/{restaurantID}", func(r chi.Router) {
-			r.Get("/menu", s.getMenu)
+			r.Get("/menu", s.getRestaurantMenu)
 		})
 	})
 }
 
-func (s *Server) getMenu(w http.ResponseWriter, r *http.Request) {
+func (s *Server) getRestaurantMenu(w http.ResponseWriter, r *http.Request) {
 	restaurantID := chi.URLParam(r, "restaurantID")
 
-	var rest restaurant.Restaurant
-
-	err := s.db.Model(&restaurant.Restaurant{}).
-		Preload("Menu.Dishes.Ingredients").
-		First(&rest, restaurantID).Error
+	menu, err := s.restaurantService.Menu(restaurantID)
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		http.Error(w, "Not Found", http.StatusNotFound)
@@ -38,5 +32,5 @@ func (s *Server) getMenu(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	render.JSON(w, r, rest.Menu)
+	render.JSON(w, r, menu)
 }
