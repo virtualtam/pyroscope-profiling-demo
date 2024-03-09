@@ -1,7 +1,7 @@
 import logging
 import structlog
-from structlog.types import Processor
 from enum import Enum
+from structlog.types import Processor
 from waiter.config import LOG_LEVEL
 
 

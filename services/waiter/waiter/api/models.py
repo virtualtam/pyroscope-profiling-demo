@@ -1,6 +1,6 @@
+import uuid
 from pydantic import BaseModel
 from typing import List
-import uuid
 
 
 class Ingredient(BaseModel):

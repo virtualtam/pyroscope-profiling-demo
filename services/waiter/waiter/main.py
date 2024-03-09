@@ -1,18 +1,18 @@
+import pyroscope
+import structlog
+import uvicorn
+from asgi_correlation_id import CorrelationIdMiddleware
 from fastapi import FastAPI
+from starlette.middleware.base import BaseHTTPMiddleware
+from waiter.api.router import api_router
 from waiter.config import (
     LISTEN_PORT,
     LISTEN_ADDR,
     PYROSCOPE_ADDR,
 )
 from waiter.logging import configure_logging
-from asgi_correlation_id import CorrelationIdMiddleware
-from starlette.middleware.base import BaseHTTPMiddleware
 from waiter.middleware import log_requests
-import pyroscope
-import uvicorn
-import structlog
 
-from waiter.api.router import api_router
 
 APP_NAME = "demo.waiter"
 

@@ -1,8 +1,8 @@
+import structlog
+import time
 from asgi_correlation_id.context import correlation_id
 from fastapi import Request, Response
 from uvicorn.protocols.utils import get_path_with_query_string
-import structlog
-import time
 
 
 async def log_requests(request: Request, call_next):
