@@ -12,6 +12,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/virtualtam/venom"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 
 	"github.com/virtualtam/pyroscope-profiling-demo/services/cook/cmd/cook/config"
 )
@@ -26,6 +28,8 @@ var (
 	logFormat            string
 
 	pyroscopeAddr string
+
+	db *gorm.DB
 )
 
 // NewRootCommand initializes the main CLI entrypoint and common command flags.
@@ -74,6 +78,13 @@ func NewRootCommand() *cobra.Command {
 					Logger:          &config.PyroscopeLogger{},
 					ServerAddress:   pyroscopeAddr,
 				})
+			}
+
+			// Database connection
+			dsn := "host=localhost user=cook password=c00k dbname=restaurant port=5432 sslmode=disable"
+			db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+			if err != nil {
+				log.Error().Err(err).Msg("failed to open database connection")
 			}
 
 			return nil

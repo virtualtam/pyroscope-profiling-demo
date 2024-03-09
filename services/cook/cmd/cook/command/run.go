@@ -6,11 +6,8 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 
 	"github.com/virtualtam/pyroscope-profiling-demo/services/cook/cmd/cook/http/api"
-	"github.com/virtualtam/pyroscope-profiling-demo/services/cook/pkg/restaurant"
 )
 
 const (
@@ -30,24 +27,6 @@ func NewRunCommand() *cobra.Command {
 			log.Info().
 				Str("log_level", logLevelValue).
 				Msg("global: setting up services")
-
-			// Database connection
-			dsn := "host=localhost user=cook password=c00k dbname=restaurant port=5432 sslmode=disable"
-			db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-			if err != nil {
-				log.Error().Err(err).Msg("failed to open database connection")
-			}
-
-			log.Info().Msg("applying database migrations")
-			if err := db.AutoMigrate(
-				&restaurant.Ingredient{},
-				&restaurant.Dish{},
-				&restaurant.Restaurant{},
-				&restaurant.Menu{},
-			); err != nil {
-				log.Error().Err(err).Msg("failed to migrate database")
-				return err
-			}
 
 			// Cook server
 			apiServer := api.NewServer(db)
