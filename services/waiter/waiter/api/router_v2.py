@@ -5,14 +5,14 @@ from http import HTTPStatus
 from pydantic import ValidationError
 from waiter.config import COOK_API_BASE_URL
 from waiter.api.models import Menu
-from functools import cache
+from functools import lru_cache
 
 api_router_v2 = APIRouter()
 
 logger = logging.getLogger(__name__)
 
 
-@cache
+@lru_cache(maxsize=16)
 @api_router_v2.get("/restaurant/{restaurant_id}/menu")
 async def get_menu(restaurant_id: int):
     url = COOK_API_BASE_URL + "/v1/restaurant/" + str(restaurant_id) + "/menu"
