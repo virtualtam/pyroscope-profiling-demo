@@ -23,7 +23,10 @@ func (s *Server) getMenu(w http.ResponseWriter, r *http.Request) {
 	restaurantID := chi.URLParam(r, "restaurantID")
 
 	var rest restaurant.Restaurant
-	err := s.db.First(&rest, restaurantID).Error
+
+	err := s.db.Model(&restaurant.Restaurant{}).
+		Preload("Menu.Dishes.Ingredients").
+		First(&rest, restaurantID).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		http.Error(w, "Not Found", http.StatusNotFound)
