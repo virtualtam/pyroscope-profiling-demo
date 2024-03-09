@@ -20,6 +20,9 @@ import (
 
 const (
 	pyroscopeApplicationName = "demo.cook"
+
+	defaultDatabaseHost string = "localhost"
+	defaultDatabasePort uint   = 5432
 )
 
 var (
@@ -28,6 +31,9 @@ var (
 	logFormat            string
 
 	pyroscopeAddr string
+
+	databaseHost string
+	databasePort uint
 
 	db *gorm.DB
 )
@@ -81,7 +87,11 @@ func NewRootCommand() *cobra.Command {
 			}
 
 			// Database connection
-			dsn := "host=localhost user=cook password=c00k dbname=restaurant port=5432 sslmode=disable"
+			dsn := fmt.Sprintf(
+				"host=%s user=cook password=c00k dbname=restaurant port=%d sslmode=disable",
+				databaseHost,
+				databasePort,
+			)
 			db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 			if err != nil {
 				log.Error().Err(err).Msg("failed to open database connection")
@@ -112,6 +122,19 @@ func NewRootCommand() *cobra.Command {
 		"pyroscope-addr",
 		"",
 		"Pyroscope server address (http://host:port)",
+	)
+
+	cmd.PersistentFlags().StringVar(
+		&databaseHost,
+		"db-host",
+		defaultDatabaseHost,
+		"Database host",
+	)
+	cmd.PersistentFlags().UintVar(
+		&databasePort,
+		"db-port",
+		defaultDatabasePort,
+		"Database port",
 	)
 
 	return cmd
