@@ -1,9 +1,7 @@
 package restaurant
 
-import "gorm.io/gorm"
-
 type Ingredient struct {
-	gorm.Model
+	Model
 
-	Name string
+	Name string `json:"name"`
 }

@@ -1,10 +1,8 @@
 package restaurant
 
-import "gorm.io/gorm"
-
 type Menu struct {
-	gorm.Model
+	Model
 
-	Dishes       []Dish `gorm:"many2many:menu_dishes;"`
-	RestaurantID uint
+	Dishes       []Dish `gorm:"many2many:menu_dishes;" json:"dishes"`
+	RestaurantID uint   `json:"-"`
 }

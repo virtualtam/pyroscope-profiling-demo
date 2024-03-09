@@ -1,11 +1,9 @@
 package restaurant
 
-import "gorm.io/gorm"
-
 type Dish struct {
-	gorm.Model
+	Model
 
-	Name        string
-	Price       float64
-	Ingredients []Ingredient `gorm:"many2many:dish_ingredients;"`
+	Name        string       `json:"name"`
+	Price       float64      `json:"price"`
+	Ingredients []Ingredient `gorm:"many2many:dish_ingredients;" json:"ingredients"`
 }
