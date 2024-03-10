@@ -22,15 +22,16 @@ It is composed of:
 
 ## TL;DR - Service Addresses
 
-| Service       | Address               |
-|---------------|-----------------------|
-| Cook API      | http://localhost:8080 |
-| Cook Locust   | http://localhost:8090 |
-| Waiter API    | http://localhost:8081 |
-| Waiter Locust | http://localhost:8089 |
-| Grafana       | http://localhost:3000 |
-| PostgreSQL    | localhost:5432        |
-| Pyroscope     | http://localhost:4040 |
+| Service       | Address               | Role                                        |
+|---------------|-----------------------|---------------------------------------------|
+| Cook API      | http://localhost:8080 | Go HTTP API backed by a PostgreSQL database |
+| Cook Locust   | http://localhost:8090 | Load tests for the Cook API                 |
+| Waiter API    | http://localhost:8081 | Python HTTP API backed by the Cook HTTP API |
+| Waiter Locust | http://localhost:8089 | Load tests for the Waiter API               |
+| Grafana       | http://localhost:3000 | Visualization & dashboards                  |
+| PostgreSQL    | localhost:5432        | Relational database for restaurant data     |
+| Prometheus    | http://localhost:9090 | Time-series database                        |
+| Pyroscope     | http://localhost:4040 | Live profiling                              |
 
 
 ## Demo
@@ -42,7 +43,7 @@ It is composed of:
 Pull the Docker images for the service containers:
 
 ```shell
-$ docker compose pull postgres pyroscope grafana
+$ docker compose pull
 ```
 
 Build the application containers:
