@@ -5,19 +5,27 @@ This repository provides several services to demonstrate the features
 of the [Grafana Pyroscope](https://grafana.com/oss/pyroscope/) live profiling
 service.
 
-It is composed of:
-
-- the [cook](./services/cook/README.md) service, written in Go, that:
+### Demo applications
+- The [cook](./services/cook/README.md) service, written in Go, that:
     - interacts with a PostgreSQL database to retrieve restaurant data: menu, dishes, ingredients
     - serves this data over an HTTP API
-- the [waiter](./services/waiter/README.md) service, written in Python, that:
+- The [waiter](./services/waiter/README.md) service, written in Python, that:
     - exposes an HTTP API to query data for a given restaurant
     - relays HTTP requests to the [cook](./services/cook/README.md) service
-- a [PostgreSQL 15](https://www.postgresql.org/docs/15/index.html) database to store and retrieve data
-- a [Pyroscope](https://grafana.com/oss/pyroscope/) service to store and explore live profiling data
-- a [Grafana](https://grafana.com/oss/) service to explore live profiling data stored by Pyroscope
+
+### Storage
+- A [PostgreSQL 15](https://www.postgresql.org/docs/15/index.html) database to store and retrieve data
+
+### Load testing
 - [Locust](https://locust.io/) scenarii to run load testing sessions on the [cook](./services/cook/README.md)
   and [waiter](./services/waiter/README.md) services
+- [Toxiproxy](https://github.com/Shopify/toxiproxy) network proxy to simulate network latency/jitter
+  between the `cook` and `postgres` services
+
+### Observability
+- [Prometheus](https://prometheus.io/) times-series database to store application metrics
+- [Pyroscope](https://grafana.com/oss/pyroscope/) to store and explore live profiling data
+- [Grafana](https://grafana.com/oss/) to explore live profiling data stored by Pyroscope
 
 
 ## TL;DR - Service Addresses
@@ -32,6 +40,7 @@ It is composed of:
 | PostgreSQL    | localhost:5432        | Relational database for restaurant data     |
 | Prometheus    | http://localhost:9090 | Time-series database                        |
 | Pyroscope     | http://localhost:4040 | Live profiling                              |
+| Toxiproxy API | http://localhost:8474 | Simulate network latency/jitter             |
 
 
 ## Demo

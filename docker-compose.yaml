@@ -15,6 +15,11 @@ services:
   # Application services
   cook:
     build: ./services/cook
+    environment:
+      COOK_DB_HOST: toxiproxy
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - app
       - observability
@@ -23,6 +28,8 @@ services:
 
   waiter:
     build: ./services/waiter
+    environment:
+      COOK_ADDR: http://toxiproxy:8080/api
     networks:
       - app
       - observability
@@ -50,6 +57,20 @@ services:
       - 5432:5432
     volumes:
       - postgres-data:/var/lib/postgresql/data
+
+  # Network proxy to simulate latency/jitter
+  toxiproxy:
+    image: ghcr.io/shopify/toxiproxy:2.8.0
+    command: -config /toxiproxy.json
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app
+    ports:
+      - 8474:8474
+    volumes:
+      - ./docker/toxiproxy/toxiproxy.json:/toxiproxy.json:ro
 
   # Observability services
   grafana:
