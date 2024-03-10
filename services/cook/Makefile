@@ -45,3 +45,9 @@ psql:
 pgdump:
 	docker compose exec postgres pg_dump -U cook --format custom restaurant > restaurant.dump
 .PHONY: pgdump
+
+# Documentation
+diagrams: database.png
+
+%.png: %.d2
+	d2 --sketch $< $@

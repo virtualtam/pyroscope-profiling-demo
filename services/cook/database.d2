@@ -1,0 +1,66 @@
+restaurants: {
+  shape: sql_table
+
+  id: bigint {constraint: primary_key}
+  created_at: timestamp with time zone
+  updated_at: timestamp with time zone
+  deleted_at: timestamp with time zone
+
+  name: text
+}
+
+menus: {
+  shape: sql_table
+
+  id: bigint {constraint: primary_key}
+  created_at: timestamp with time zone
+  updated_at: timestamp with time zone
+  deleted_at: timestamp with time zone
+
+  restaurant_id: bigint {constraint: foreign_key}
+}
+
+menus.restaurant_id -> restaurants.id
+
+menu_dishes: {
+  shape: sql_table
+
+  menu_id: bigint {constraint: primary_key}
+  dish_id: bigint {constraint: primary_key}
+}
+
+menu_dishes.menu_id -> menus.id
+menu_dishes.dish_id -> dishes.id
+
+dishes: {
+  shape: sql_table
+
+  id: bigint {constraint: primary_key}
+  created_at: timestamp with time zone
+  updated_at: timestamp with time zone
+  deleted_at: timestamp with time zone
+
+  name: text
+  price: numeric
+}
+
+ingredients: {
+  shape: sql_table
+
+  id: bigint {constraint: primary_key}
+  created_at: timestamp with time zone
+  updated_at: timestamp with time zone
+  deleted_at: timestamp with time zone
+
+  name: text
+}
+
+dish_ingredients: {
+  shape: sql_table
+
+  dish_id: bigint {constraint: primary_key}
+  ingredient_id: bigint {constraint: primary_key}
+}
+
+dish_ingredients.dish_id -> dishes.id
+dish_ingredients.ingredient_id -> ingredients.id

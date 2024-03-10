@@ -43,3 +43,7 @@ Dump the `restaurant` database:
 ```shell
 $ make pgdump
 ```
+
+## Reference
+### Database Entity Relation Diagram
+<img src="./database.png" width="600px">
