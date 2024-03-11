@@ -50,10 +50,15 @@ live-pprof:
 			run
 .PHONY: live-pprof
 
-PPROF_URL := http://localhost:6060/pprof
+# pprof profiling
+PPROF_URL := http://localhost:6060/debug/pprof
+
+pprof-goroutine:
+	go tool pprof $(PPROF_URL)/goroutine
+.PHONY: pprof-goroutine
 
 pprof-heap:
-	go tool pprof
+	go tool pprof $(PPROF_URL)/heap
 .PHONY: pprof-heap
 
 # Live development server - PostgreSQL console
