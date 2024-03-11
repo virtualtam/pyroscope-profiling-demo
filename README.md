@@ -44,6 +44,14 @@ service.
 
 
 ## Demo
+### Overview
+#### Services
+<img src="./docs/demo_services.png" width="400px">
+
+#### Demo stack
+<img src="./docs/demo_services_proxy.png" width="700px">
+
+
 ### Preparation
 1. [Prepare the dataset for the demo](./dataset/README.md)
 2. [Build the `cook` application and populate the database](./services/cook/README.md)

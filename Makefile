@@ -57,3 +57,9 @@ toxiproxy-dsl:
 	$(TOXIPROXY_CLI) toxic update -n $(TOXIPROXY_COOK_TOXIC) -a latency=25 -a jitter=10 $(TOXIPROXY_COOK_PROXY)
 	$(TOXIPROXY_CLI) toxic update -n $(TOXIPROXY_POSTGRES_TOXIC) -a latency=25 -a jitter=10 $(TOXIPROXY_POSTGRES_PROXY)
 .PHONY: toxiproxy-dsl
+
+# Documentation
+diagrams: docs/demo_services.png docs/demo_services_proxy.png
+
+%.png: %.d2
+	d2 --sketch $< $@
