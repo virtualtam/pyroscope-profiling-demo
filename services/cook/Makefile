@@ -34,8 +34,27 @@ live:
 	@echo "== Starting services"
 	docker compose up -d postgres pyroscope
 	@echo "== Watching for changes... (hit Ctrl+C when done)"
-	@watchexec --restart --exts go -- go run ./cmd/cook/ --pyroscope-addr http://localhost:4040 run
+	@watchexec --restart --exts go -- \
+		go run ./cmd/cook/ \
+			--pyroscope-addr http://localhost:4040 \
+			run
 .PHONY: live
+
+live-pprof:
+	@echo "== Starting services"
+	docker compose up -d postgres pyroscope
+	@echo "== Watching for changes... (hit Ctrl+C when done)"
+	@watchexec --restart --exts go -- \
+		go run ./cmd/cook/ \
+			--pprof-addr 0.0.0.0:6060 \
+			run
+.PHONY: live-pprof
+
+PPROF_URL := http://localhost:6060/pprof
+
+pprof-heap:
+	go tool pprof
+.PHONY: pprof-heap
 
 # Live development server - PostgreSQL console
 psql:

@@ -31,9 +31,11 @@ ENV COOK_LISTEN_ADDR="0.0.0.0:8080" \
     COOK_LOG_LEVEL="info" \
     COOK_DB_HOST="postgres" \
     COOK_DB_PORT=5432 \
+    COOK_PPROF_ADDR="" \
     COOK_PYROSCOPE_ADDR="http://pyroscope:4040"
 
-EXPOSE 8080
+EXPOSE 6060  # pprof
+EXPOSE 8080  # cook API
 
 USER cook
 WORKDIR /var/lib/cook

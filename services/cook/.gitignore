@@ -8,4 +8,6 @@ coverage.html
 
 .vscode/
 
+profile*.png
+
 *.dump

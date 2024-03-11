@@ -2,6 +2,7 @@ package command
 
 import (
 	"fmt"
+	_ "net/http/pprof"
 	"os"
 	"path/filepath"
 	"strings"
@@ -16,6 +17,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/virtualtam/pyroscope-profiling-demo/services/cook/cmd/cook/config"
+	"github.com/virtualtam/pyroscope-profiling-demo/services/cook/cmd/cook/http/pprofiler"
 )
 
 const (
@@ -30,6 +32,7 @@ var (
 	logLevelValue        string
 	logFormat            string
 
+	pprofAddr     string
 	pyroscopeAddr string
 
 	databaseHost string
@@ -73,19 +76,33 @@ func NewRootCommand() *cobra.Command {
 				log.Info().Strs("config_paths", configPaths).Msg("configuration: no file found")
 			}
 
+			// Go pprof server
+			if pprofAddr != "" {
+				pprofServer := pprofiler.NewServer(pprofAddr)
+				log.Info().
+					Str("pprof_addr", pprofAddr).
+					Msg("global: enabling pprof profiling")
+
+				go func() {
+					if err := pprofServer.ListenAndServe(); err != nil {
+						log.Error().Err(err).Msg("failed to start pprof server")
+					}
+				}()
+			}
+
 			// Pyroscope live profiling
 			if pyroscopeAddr != "" {
 				log.Info().
 					Str("pyroscope_addr", pyroscopeAddr).
 					Str("pyroscope_app", pyroscopeApplicationName).
-					Msg("global: enabling live profiling")
+					Msg("global: enabling pyroscope live profiling")
 
 				if _, err := pyroscope.Start(pyroscope.Config{
 					ApplicationName: pyroscopeApplicationName,
 					Logger:          &config.PyroscopeLogger{},
 					ServerAddress:   pyroscopeAddr,
 				}); err != nil {
-					log.Error().Err(err).Msg("global: failed to start profiler")
+					log.Error().Err(err).Msg("global: failed to start pyroscope profiler")
 					return err
 				}
 			}
@@ -121,6 +138,12 @@ func NewRootCommand() *cobra.Command {
 		),
 	)
 
+	cmd.PersistentFlags().StringVar(
+		&pprofAddr,
+		"pprof-addr",
+		"",
+		"pprof listen address (host:port)",
+	)
 	cmd.PersistentFlags().StringVar(
 		&pyroscopeAddr,
 		"pyroscope-addr",
