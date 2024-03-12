@@ -29,7 +29,7 @@ func NewRunCommand() *cobra.Command {
 				Msg("global: setting up services")
 
 			// Cook server
-			apiServer := api.NewServer(db)
+			apiServer := api.NewServer(db, redisClient)
 
 			httpServer := &http.Server{
 				Addr:         listenAddr,

@@ -12,12 +12,12 @@ import (
 func (s *Server) registerV1API() {
 	s.router.Route("/api/v1", func(r chi.Router) {
 		r.Route("/restaurant/{restaurantID}", func(r chi.Router) {
-			r.Get("/menu", s.getRestaurantMenu)
+			r.Get("/menu", s.v1getRestaurantMenu)
 		})
 	})
 }
 
-func (s *Server) getRestaurantMenu(w http.ResponseWriter, r *http.Request) {
+func (s *Server) v1getRestaurantMenu(w http.ResponseWriter, r *http.Request) {
 	restaurantID := chi.URLParam(r, "restaurantID")
 
 	menu, err := s.restaurantService.Menu(restaurantID)
