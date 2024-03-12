@@ -18,6 +18,10 @@ locust-waiter-v2:
 	API_VERSION=2 locust -f loadtest/locustfile.py --host $(WAITER_HOST)
 .PHONY: locust-waiter-v2
 
+locust-waiter-v3:
+	API_VERSION=3 locust -f loadtest/locustfile.py --host $(WAITER_HOST)
+.PHONY: locust-waiter-v3
+
 # Live development server - PostgreSQL console
 psql:
 	docker compose exec postgres psql -U cook restaurant
