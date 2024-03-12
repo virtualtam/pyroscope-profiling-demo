@@ -2,7 +2,6 @@ import requests
 import logging
 from fastapi import APIRouter, HTTPException
 from http import HTTPStatus
-from pydantic import ValidationError
 from waiter.config import COOK_API_BASE_URL
 from waiter.api.models import Menu
 from functools import lru_cache
