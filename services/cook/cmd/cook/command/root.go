@@ -44,8 +44,9 @@ var (
 // NewRootCommand initializes the main CLI entrypoint and common command flags.
 func NewRootCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "cook",
-		Short: "Pyroscope Demo - Cook service",
+		Use:          "cook",
+		Short:        "Pyroscope Demo - Cook service",
+		SilenceUsage: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			// Configuration file lookup paths
 			home, err := os.UserHomeDir()
@@ -150,6 +151,7 @@ func NewRootCommand() *cobra.Command {
 		"",
 		"Pyroscope server address (http://host:port)",
 	)
+	cmd.MarkFlagsMutuallyExclusive("pprof-addr", "pyroscope-addr")
 
 	cmd.PersistentFlags().StringVar(
 		&databaseHost,
