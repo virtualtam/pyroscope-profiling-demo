@@ -10,5 +10,11 @@
     "listen": "[::]:5432",
     "upstream": "postgres:5432",
     "enabled": true
+  },
+  {
+    "name": "redis_1",
+    "listen": "[::]:6379",
+    "upstream": "redis:6379",
+    "enabled": true
   }
 ]

@@ -15,6 +15,7 @@ service.
 
 ### Storage
 - A [PostgreSQL 15](https://www.postgresql.org/docs/15/index.html) database to store and retrieve data
+- A [Redis](https://redis.io/) key-value store to cache request responses
 
 ### Load testing
 - [Locust](https://locust.io/) scenarii to run load testing sessions on the [cook](./services/cook/README.md)
@@ -39,6 +40,7 @@ service.
 | Grafana       | http://localhost:3000 | Visualization & dashboards                  |
 | PostgreSQL    | localhost:5432        | Relational database for restaurant data     |
 | Prometheus    | http://localhost:9090 | Time-series database                        |
+| Redis         | localhost:6379        | Key-value store for API caches              |
 | Pyroscope     | http://localhost:4040 | Live profiling                              |
 | Toxiproxy API | http://localhost:8474 | Simulate network latency/jitter             |
 

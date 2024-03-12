@@ -1,6 +1,7 @@
 package command
 
 import (
+	"context"
 	"fmt"
 	_ "net/http/pprof"
 	"os"
@@ -8,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/grafana/pyroscope-go"
+	"github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
@@ -25,6 +27,10 @@ const (
 
 	defaultDatabaseHost string = "localhost"
 	defaultDatabasePort uint   = 5432
+
+	defaultRedisHost     string = "localhost"
+	defaultRedisPort     uint   = 6379
+	defaultRedisDatabase uint   = 0
 )
 
 var (
@@ -38,7 +44,12 @@ var (
 	databaseHost string
 	databasePort uint
 
-	db *gorm.DB
+	redisHost     string
+	redisPort     uint
+	redisDatabase uint
+
+	db          *gorm.DB
+	redisClient *redis.Client
 )
 
 // NewRootCommand initializes the main CLI entrypoint and common command flags.
@@ -119,6 +130,18 @@ func NewRootCommand() *cobra.Command {
 				log.Error().Err(err).Msg("failed to open database connection")
 			}
 
+			// Redis KV store connection
+			redisOpts := &redis.Options{
+				Addr: fmt.Sprintf("%s:%d", redisHost, redisPort),
+				DB:   int(redisDatabase),
+			}
+			redisClient = redis.NewClient(redisOpts)
+
+			if err := redisClient.Ping(context.Background()).Err(); err != nil {
+				log.Error().Err(err).Msg("failed to open redis connection")
+				return err
+			}
+
 			return nil
 		},
 	}
@@ -164,6 +187,25 @@ func NewRootCommand() *cobra.Command {
 		"db-port",
 		defaultDatabasePort,
 		"Database port",
+	)
+
+	cmd.PersistentFlags().StringVar(
+		&redisHost,
+		"redis-host",
+		defaultRedisHost,
+		"Redis host",
+	)
+	cmd.PersistentFlags().UintVar(
+		&redisPort,
+		"redis-port",
+		defaultRedisPort,
+		"Redis port",
+	)
+	cmd.PersistentFlags().UintVar(
+		&redisDatabase,
+		"redis-db",
+		defaultRedisDatabase,
+		"Redis database",
 	)
 
 	return cmd

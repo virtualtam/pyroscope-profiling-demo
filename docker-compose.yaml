@@ -17,8 +17,11 @@ services:
     build: ./services/cook
     environment:
       COOK_DB_HOST: toxiproxy
+      COOK_REDIS_HOST: toxiproxy
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     networks:
       - app
@@ -58,12 +61,26 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  redis:
+    image: redis:7.2
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app
+    ports:
+      - 6379:6379
+
   # Network proxy to simulate latency/jitter
   toxiproxy:
     image: ghcr.io/shopify/toxiproxy:2.8.0
     command: -config /toxiproxy.json
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     networks:
       - app
