@@ -25,8 +25,9 @@ app = FastAPI(
     docs_url=None,
 )
 
-app.add_middleware(CorrelationIdMiddleware)
 app.add_middleware(BaseHTTPMiddleware, dispatch=log_requests)
+# Need to add at the end as middlewares are applied in reverse order
+app.add_middleware(CorrelationIdMiddleware)
 
 
 @app.get("/")
