@@ -30,9 +30,12 @@ test:
 .PHONY: test
 
 # Live development server
-live:
+live-services:
 	@echo "== Starting services"
-	docker compose up -d postgres pyroscope
+	docker compose up -d postgres pyroscope redis
+.PHONY: live-services
+
+live: live-services
 	@echo "== Watching for changes... (hit Ctrl+C when done)"
 	@watchexec --restart --exts go -- \
 		go run ./cmd/cook/ \
@@ -40,9 +43,7 @@ live:
 			run
 .PHONY: live
 
-live-pprof:
-	@echo "== Starting services"
-	docker compose up -d postgres pyroscope
+live-pprof: live-services
 	@echo "== Watching for changes... (hit Ctrl+C when done)"
 	@watchexec --restart --exts go -- \
 		go run ./cmd/cook/ \
