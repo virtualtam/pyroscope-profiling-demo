@@ -11,7 +11,7 @@ api_router_v1 = APIRouter()
 logger = logging.getLogger(__name__)
 
 
-@api_router_v1.get("/restaurant/{restaurant_id}/menu")
+@api_router_v1.get("/restaurant/{restaurant_id}/menu", response_model=Menu)
 async def get_menu(restaurant_id: int):
     url = COOK_API_BASE_URL + "/v1/restaurant/" + str(restaurant_id) + "/menu"
 
@@ -24,10 +24,5 @@ async def get_menu(restaurant_id: int):
 
     if r.status_code != HTTPStatus.OK:
         raise HTTPException(status_code=r.status_code)
-
-    try:
-        Menu.model_validate(r.json())
-    except ValidationError as err:
-        logger.error(err)
 
     return r.json()
