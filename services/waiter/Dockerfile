@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 
 ENV PYTHONUNBUFFERED=1 \
@@ -11,7 +11,7 @@ ENV PYTHONUNBUFFERED=1 \
     WAITER_PYROSCOPE_ADDR="http://pyroscope:4040"
 
 
-ARG POETRY_VERSION=1.8.2
+ARG POETRY_VERSION=1.8.5
 RUN pip3 install "poetry==${POETRY_VERSION}"
 
 RUN groupadd \
