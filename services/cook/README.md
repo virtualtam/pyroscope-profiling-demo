@@ -9,7 +9,7 @@ $ make build
 Start the PostgreSQL service:
 
 ```shell
-$ docker compose up -d postgresql
+$ docker compose up -d postgres
 ```
 
 Apply database migrations:

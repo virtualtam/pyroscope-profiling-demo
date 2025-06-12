@@ -15,18 +15,7 @@ We will use the following data:
 
 ## Install script dependencies
 
-Create and activate a Python3 virtualenv:
-
-```shell
-$ python3 -m venv .venv
-$ source .venv/bin/activate
-```
-
-Install dependencies:
-
-```shell
-$ pip install -r requirements.txt
-```
+1. Install [uv](https://github.com/astral-sh/uv)
 
 ## Prepare data
 

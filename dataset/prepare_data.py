@@ -1,4 +1,10 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# dependencies = [
+#   "pandas==2.3.0",
+#   "pyarrow==20.0.0",  # For faster CSV reading and better memory usage
+# ]
+# ///
 from argparse import ArgumentParser
 from ast import literal_eval
 import logging
