@@ -22,8 +22,14 @@ We will use the following data:
 The `prepare_data.py` script will process the dataset to output a JSON file with curated data,
 that can then be imported into the PostgreSQL database.
 
+To see available options:
+
+```shell
+$ ./prepare_data.py --help
+```
+
 Run the script with:
 
 ```shell
-$ ./prepare_data.py RAW_recipes.csv recipes.out.json
+$ ./prepare_data.py --limit 10000 RAW_recipes.csv recipes.out.json
 ```

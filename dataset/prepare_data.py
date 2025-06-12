@@ -31,6 +31,12 @@ def main():
         help="Size of chunks for processing CSV data",
     )
     parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="Limit number of recipes to process",
+    )
+    parser.add_argument(
         "--workers",
         type=int,
         default=multiprocessing.cpu_count(),
@@ -39,15 +45,17 @@ def main():
 
     args = parser.parse_args()
 
-    recipes = prepare_data(args.input, args.chunk_size, args.workers)
+    recipes = prepare_data(args.input, args.limit, args.chunk_size, args.workers)
     recipes.to_json(args.output, orient="records")
 
 
-def prepare_data(recipe_csv: str, chunk_size: int, workers: int) -> pd.DataFrame:
+def prepare_data(
+    recipe_csv: str, limit: int, chunk_size: int, workers: int
+) -> pd.DataFrame:
     ingredient_df = pd.read_pickle("ingr_map.pkl")
     ingredient_map = dict(zip(ingredient_df["raw_ingr"], ingredient_df["replaced"]))
 
-    chunks = pd.read_csv(recipe_csv, chunksize=chunk_size)
+    chunks = pd.read_csv(recipe_csv, chunksize=chunk_size, nrows=limit)
 
     with multiprocessing.Pool(processes=workers) as pool:
         processed_chunks = pool.starmap(
