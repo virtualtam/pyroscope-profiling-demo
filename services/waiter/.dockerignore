@@ -1,4 +1,5 @@
 */*.pyc
+**/*.egg-info/
 **/*.pyd
 **/*.pyo
 **/__pycache__
