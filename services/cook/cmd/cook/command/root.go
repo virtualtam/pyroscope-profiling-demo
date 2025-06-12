@@ -112,7 +112,19 @@ func NewRootCommand() *cobra.Command {
 				if _, err := pyroscope.Start(pyroscope.Config{
 					ApplicationName: pyroscopeApplicationName,
 					Logger:          &config.PyroscopeLogger{},
-					ServerAddress:   pyroscopeAddr,
+					ProfileTypes: []pyroscope.ProfileType{
+						pyroscope.ProfileAllocObjects,
+						pyroscope.ProfileAllocSpace,
+						pyroscope.ProfileBlockCount,
+						pyroscope.ProfileBlockDuration,
+						pyroscope.ProfileCPU,
+						pyroscope.ProfileGoroutines,
+						pyroscope.ProfileInuseObjects,
+						pyroscope.ProfileInuseSpace,
+						pyroscope.ProfileMutexCount,
+						pyroscope.ProfileMutexDuration,
+					},
+					ServerAddress: pyroscopeAddr,
 				}); err != nil {
 					log.Error().Err(err).Msg("global: failed to start pyroscope profiler")
 					return err
